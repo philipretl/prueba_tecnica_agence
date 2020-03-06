@@ -18,7 +18,28 @@ class ConsultorController extends Controller
      * @return Response
      */
     public function reporte(Request $request){
-      dd($request->all());
+      $result= new Result();
+      $result= $this->consultorService->calcularGanancias($request->all(),$result);
+
+      switch ($result->getStatus()) {
+        case 'SUCCESS':
+            return view('consultor::consultor')->with('data',$result->getDataAll());
+          break;
+        case 'EMPTY_CONSULTORS' :
+            flash('Seleccione al menos un consultor')->error();
+            return redirect()->back();
+          break;
+
+        default:
+          $response= $this->errorResponse(
+              $result->getAllError(),
+              $result->getAllMessage(),
+              $result->getCode(),
+              'exist conflict whit the request, please check the errors and messages'
+          );
+          break;
+      }
+      return $response;
     }
 
     public function index()
@@ -28,20 +49,13 @@ class ConsultorController extends Controller
 
       switch ($result->getStatus()) {
         case 'SUCCESS':
-          return view('consultor::consultor')->with('data',$result->getDataAll());
+            return view('consultor::consultor')->with('data',$result->getDataAll());
           break;
         case 'EMPTY' :
-
-          $response= $this->successResponse(
-              [],
-              $result->getAllMessage(),
-              $result->getCode(),
-              'empty list of products'
-          );
+            return view('consultor::consultor');
           break;
 
         default:
-
           $response= $this->errorResponse(
               $result->getAllError(),
               $result->getAllMessage(),

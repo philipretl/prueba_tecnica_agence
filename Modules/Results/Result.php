@@ -79,6 +79,15 @@ class Result
         return $this->messages[$position];
     }
 
+    public function findMessage($message):Bool{
+        foreach ($this->messages as $messageInstance) {
+          if($message==$messageInstance->getCodeMessage()){
+            return true;
+          }
+        }
+        return false;
+    }
+
     public function getAllMessage(){
         return $this->messages;
     }

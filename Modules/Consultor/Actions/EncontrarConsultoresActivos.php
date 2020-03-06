@@ -22,7 +22,6 @@ class EncontrarConsultoresActivos{
     });
 
     if ($consultoresActivos->isEmpty()) {
-
       $result->setStatus('EMPTY');
       $result->addMessage('[EMPTY_DATA] # Empty data from resource requested');
       $result->setCode(200);
