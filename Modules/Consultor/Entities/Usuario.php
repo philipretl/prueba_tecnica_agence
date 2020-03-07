@@ -44,4 +44,23 @@ class Usuario extends Model
     public function permiso(){
       return $this->hasOne('Modules\Consultor\Entities\PermisoSistema','co_usuario');
     }
+    public function salario(){
+      return $this->hasOne('Modules\Consultor\Entities\Salario','co_usuario');
+    }
+
+    public function valorSalario(){
+      $salario=$this->salario;
+      $valorSalario;
+      if($salario!=null){
+        $valorSalario=$salario->brut_salario;
+      }else{
+        $valorSalario=0;
+      }
+      return $valorSalario;
+    }
+
+
+    public function factura(){
+      return $this->hasManyThrough('Modules\Consultor\Entities\Factura','Modules\Consultor\Entities\OrdenServicio','co_usuario','co_os','co_usuario','co_os');
+    }
 }

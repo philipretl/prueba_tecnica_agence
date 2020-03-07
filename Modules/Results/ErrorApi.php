@@ -2,7 +2,7 @@
 
 namespace Modules\Results;
 
-class Error
+class ErrorApi
 {
   protected $code_message;
   protected $message;
@@ -17,13 +17,25 @@ class Error
 
   public function divide($data){
     $dataArray=explode(' # ',$data);
-    $this->code_message=$dataArray[0];
+
 
     //treated the data input for delete ' ' (space) and remplace for '_'
-    $treatedField= $this->strSpaceReplace($dataArray[1]);
-
-    $this->field=$treatedField;
-    $this->message=$dataArray[2];
+    switch (sizeof($dataArray)) {
+      case 1:
+        $this->code_message='[NOTHING]';
+        $this->message=$dataArray[0];
+        $this->field='[NOTHING]';
+        break;
+      case 2:
+        // code...
+        break;
+      default:
+        $this->code_message=$dataArray[0];
+        $treatedField= $this->strSpaceReplace($dataArray[1]);
+        $this->field=$treatedField;
+        $this->message=$dataArray[2];
+        break;
+    }
 
   }
   public function strSpaceReplace($data){

@@ -4,8 +4,12 @@ namespace Modules\Consultor\Services;
 use Modules\Consultor\Interfaces\ConsultorServiceInterface;
 use Modules\Consultor\Actions\EncontrarConsultoresXid;
 use Modules\Consultor\Actions\EncontrarConsultoresActivos;
-use Modules\Consultor\Actions\CalcularGananciaNeta;
+use Modules\Consultor\Actions\GenerarFecha;
+use Modules\Consultor\Actions\CalcularSaldo;
+use Modules\Consultor\Actions\GenerarInforme;
+use Modules\Consultor\Validators\GananciasInformeValidator;
 use Modules\Results\Result;
+
 
 class ConsultorService implements ConsultorServiceInterface{
 
@@ -17,23 +21,30 @@ class ConsultorService implements ConsultorServiceInterface{
 
   public function calcularGanancias($data,Result $result){
 
-    if (!array_key_exists('consultores',$data)) {
-      $result->setStatus('EMPTY_CONSULTORS');
-      $result->addMessage('[EMPTY_DATA] # Empty data from resource requested');
-      $result->setCode(200);
-      return $result;
+    $resultValidator = GananciasInformeValidator::execute($data);
+
+    if ($resultValidator->getStatus()!='VALIDATED') {
+      return $resultValidator;
     }
     $resultAction= EncontrarConsultoresXid::execute($data,$result);
 
     if ($resultAction->findMessage('[LIST_DATA]')) {
 
+      $fechaInicial=GenerarFecha::execute($data['month_from'], $data['year_from']);
+
+      $fechaFinal=GenerarFecha::execute($data['month_to'], $data['year_to']);
+
       foreach ($resultAction->getData('consultores') as $consultor) {
-        dd($data);
-        CalcularGananciaNeta::execute($consultor);
+        $generar=new GenerarInforme();
+        $generar->execute($consultor,$fechaInicial,$fechaFinal);
+
+        CalcularSaldo::execute($consultor);
       }
 
     }
     $result->addData('consultores', $resultAction->getData('consultores'));
+    $result->addData('fecha_inicial', $fechaInicial->format('Y-m-d'));
+    $result->addData('fecha_final', $fechaFinal->format('Y-m-d'));
     return $result;
   }
 }

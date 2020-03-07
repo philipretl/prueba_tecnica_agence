@@ -7,11 +7,11 @@ use Modules\Consultor\Entities\Usuario;
 class EncontrarConsultoresActivos{
 
   public static function execute(Result $result):Result{
-    $consultores = Usuario::with('permiso')->get();
+    $consultores = Usuario::with('permiso')->with('salario')->get();
 
     $consultoresActivos = $consultores->reject(function ($consultor) {
       if ($consultor->permiso!=null) {
-        return $consultor->permiso->co_tipo_usuario != 1;
+        return $consultor->permiso->co_tipo_usuario!= 1;
       }
 
     });

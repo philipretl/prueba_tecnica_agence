@@ -19,27 +19,27 @@ class ConsultorController extends Controller
      */
     public function reporte(Request $request){
       $result= new Result();
-      $result= $this->consultorService->calcularGanancias($request->all(),$result);
+      $result= $this->consultorService->calcularGanancias($request->all(),$result,'api');
 
       switch ($result->getStatus()) {
         case 'SUCCESS':
-            return view('consultor::consultor')->with('data',$result->getDataAll());
-          break;
-        case 'EMPTY_CONSULTORS' :
-            flash('Seleccione al menos un consultor')->error();
-            return redirect()->back();
+          return view('consultor::reportes')
+          ->with('fecha_inicial',$result->getDataAll()['fecha_inicial'])
+          ->with('fecha_final',$result->getDataAll()['fecha_final'])
+          ->with('reportes',$result->getDataAll()['consultores'])
+          ->with('consultores',$result->getDataAll()['consultores']);
           break;
 
+        case 'ERR_FORM' :
+            return back()->withInput($request->all())
+             ->withErrors($result->getAllError());
+
+        break;
         default:
-          $response= $this->errorResponse(
-              $result->getAllError(),
-              $result->getAllMessage(),
-              $result->getCode(),
-              'exist conflict whit the request, please check the errors and messages'
-          );
-          break;
+          return redirect()->route('consultor.dashboard');
+        break;
       }
-      return $response;
+
     }
 
     public function index()
@@ -48,24 +48,18 @@ class ConsultorController extends Controller
       $result= $this->consultorService->consultoresActivos();
 
       switch ($result->getStatus()) {
+
         case 'SUCCESS':
-            return view('consultor::consultor')->with('data',$result->getDataAll());
+            return view('consultor::consultor')->with('consultores',$result->getDataAll()['consultoresActivos']);
           break;
         case 'EMPTY' :
             return view('consultor::consultor');
           break;
-
         default:
-          $response= $this->errorResponse(
-              $result->getAllError(),
-              $result->getAllMessage(),
-              $result->getCode(),
-              'exist conflict whit the request, please check the errors and messages'
-          );
-          break;
-      }
-      return $response;
+          return redirect()->route('consultor.dashboard');
+        break;
 
+      }
     }
 
     /**
