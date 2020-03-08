@@ -11,6 +11,4 @@
 |
 */
 
-Route::get('/', function () {
-    return view('consultor::index');
-})->name('/');
+Route::get('/', 'IndexController@index')->name('/');
