@@ -13,18 +13,20 @@ class CalcularSaldo
     $totalComision=0;
     $totalLucro=0;
     $total=array();
-
-    foreach ($consultor->reportes as $reporte) {
-      $totalGanancia= $totalGanancia + $reporte->getGanancia();
-      $totalComision= $totalComision + $reporte->getComision();
-      $totalCostoFijo = $totalCostoFijo + $consultor->valorSalario();
-      $totalLucro= $totalLucro  + $reporte->getLucro();
+    if($consultor->reportes!=null){
+      foreach ($consultor->reportes as $reporte) {
+        $totalGanancia= $totalGanancia + $reporte->getGanancia();
+        $totalComision= $totalComision + $reporte->getComision();
+        $totalCostoFijo = $totalCostoFijo + $consultor->valorSalario();
+        $totalLucro= $totalLucro  + $reporte->getLucro();
+      }
+      $total['total_ganancia']=$totalGanancia;
+      $total['total_comision']=$totalComision;
+      $total['total_costo_fijo']=$totalCostoFijo;
+      $total['total_lucro']=$totalLucro;
+      $consultor->totalSaldos=$total;
     }
-    $total['total_ganancia']=$totalGanancia;
-    $total['total_comision']=$totalComision;
-    $total['total_costo_fijo']=$totalCostoFijo;
-    $total['total_lucro']=$totalLucro;
-    $consultor->totalSaldos=$total;
+
   }
 
 

@@ -7,6 +7,7 @@ use Modules\Consultor\Actions\EncontrarConsultoresActivos;
 use Modules\Consultor\Actions\GenerarFecha;
 use Modules\Consultor\Actions\CalcularSaldo;
 use Modules\Consultor\Actions\GenerarInforme;
+use Modules\Consultor\Actions\ReporteDesempenio;
 use Modules\Consultor\Validators\GananciasInformeValidator;
 use Modules\Results\Result;
 
@@ -45,6 +46,18 @@ class ConsultorService implements ConsultorServiceInterface{
     $result->addData('consultores', $resultAction->getData('consultores'));
     $result->addData('fecha_inicial', $fechaInicial->format('Y-m-d'));
     $result->addData('fecha_final', $fechaFinal->format('Y-m-d'));
+
+    return $result;
+  }
+
+  public function generarReporteDesempenio($data){
+
+    $result = new Result();
+
+    if (!empty($data['consultores'])) {
+      $result=ReporteDesempenio::execute($data['consultores'], $data['fecha_inicial'], $data['fecha_final']);
+    }
+
     return $result;
   }
 }

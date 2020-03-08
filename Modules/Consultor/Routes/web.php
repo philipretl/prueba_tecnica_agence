@@ -14,4 +14,5 @@
 Route::prefix('consultor')->group(function() {
     Route::get('/balance', 'ConsultorController@index')->name('consultor.dashboard');
     Route::post('/informe', 'ConsultorController@reporte')->name('consultor.informe');
+    Route::post('/graficos/barra', 'ConsultorController@graficos')->name('consultor.graficos.barra');
 });

@@ -12,11 +12,56 @@
           @enderror
           <div class="card-body">
             @isset($reportes)
-              <a href="{{route('consultor.dashboard')}}" class="text-white">
-                <button type="button" class="btn btn-outline-success" name="button">
-                  regresar
-                </button>
-              </a>
+              <div class="col">
+              <div class="row">
+                <div class="col ">
+                  <a href="{{route('consultor.dashboard')}}" class="text-white">
+                    <button type="button" class="btn btn-outline-success" name="button">
+                      regresar
+                    </button>
+                  </a>
+                </div>
+
+                <div class="col">
+                  <form class="" action="{{route('consultor.graficos.barra')}}" method="post">
+                    @csrf
+                    @method('POST')
+                    <input class="" type="hidden" name="consultores" value="{{$consultores}}">
+                    <input class="date" type="hidden" name="fecha_inicial" value="{{$fecha_inicial}}">
+                    <input class="date" type="hidden" name="fecha_final" value="{{$fecha_final}}">
+
+                    <button type="submit" class="btn btn-primary btn-border btn-round">
+                      <i class="fas fa-chart-bar"> Informe Desempeño</i>
+                    </button>
+
+                  </form>
+                </div>
+                <div class="col">
+
+                  <form class="" action="{{route('consultor.graficos.barra')}}" method="post">
+                    <input class="" type="hidden" name="consultores" value="{{$consultores}}">
+                    <input class="date" type="hidden" name="fecha_inicial" value="{{$fecha_inicial}}">
+                    <input class="date" type="hidden" name="fecha_final" value="{{$fecha_final}}">
+                    <button type="button" class="btn btn-primary btn-border btn-round" name="button">
+                      <i class="fas fa-chart-pie"> Informe Ganancias</i>
+                    </button>
+
+                  </form>
+                </div>
+
+              </div>
+            </div>
+              <div class="card-action">
+                <div class="container">
+
+                </div>
+
+                <br>
+                <div class="container">
+
+                </div>
+
+              </div>
               <h5 class="card-title">Ganancias de consultores</h5>
             @else
               <h5 class="card-title">Seleccione los consultores a filtrar</h5>
@@ -67,6 +112,7 @@
                   </div>
                 </div>
 
+
               @endif
             @else
               <br>
@@ -83,25 +129,30 @@
                 <h5 class="card-title">{{$consultor->co_usuario}}</h5>
                 <hr>
                 @if ($consultor->reportes!=null)
+                  <div class="table-responsive">
+                    <table id="add-row" class="display table  table-sm table-striped table-hover table-bordered" >
+
+                    <thead>
+                      <tr>
+                        <th>Periodo</th>
+                        <th>Receita Liquida</th>
+                        <th>Custo Fixo</th>
+                        <th>Comissao</th>
+                        <th>Lucro</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
                   @foreach ($consultor->reportes as $reporte)
-                    {{-- @php
-                      dd($reporte->getMes());
-                    @endphp --}}
+
                     <div class="table-responsive">
                       <table id="add-row" class="display table  table-sm table-striped table-hover table-bordered" >
-                        <thead>
-                          <tr>
-                            <th style="width:15%">Periodo</th>
-                            <th>Receita Liquida</th>
-                            <th>Custo Fixo</th>
-                            <th>Comissao</th>
-                            <th>Lucro</th>
-                          </tr>
-                        </thead>
+
 
                         <tbody>
 
                           <tr>
+
                             <td>{{$reporte->getPeriodo() }}</td>
                             <td>@money(round($reporte->getGanancia()*100),'BRL') </td>
                             <td>@money($consultor->valorSalario()*100,'BRL')</td>
@@ -109,11 +160,6 @@
                             <td>@money(round($reporte->getLucro()*100),'BRL')</td>
 
                           </tr>
-                          {{-- <td>{{$reporte->getPeriodo() }}</td>
-                          <td>{{$reporte->getGanancia()}} </td>
-                          <td>{{$consultor->valorSalario()}}</td>
-                          <td>{{$reporte->getComision()}}</td>
-                          <td>{{$reporte->getLucro()}}</td> --}}
 
                         </tr>
 
@@ -142,7 +188,6 @@
                 @endif
               </div>
             @endforeach
-            </form>
           </div>
         </div>
       @endisset

@@ -58,8 +58,7 @@ class Usuario extends Model
       }
       return $valorSalario;
     }
-
-
+    
     public function factura(){
       return $this->hasManyThrough('Modules\Consultor\Entities\Factura','Modules\Consultor\Entities\OrdenServicio','co_usuario','co_os','co_usuario','co_os');
     }

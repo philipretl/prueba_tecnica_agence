@@ -55,6 +55,7 @@ class GenerarInforme{
         );
 
         $fecha = Carbon::parse($facMes->first()->data_emissao);
+        
         $reporteMensual= new ReporteMensual(
           $valor,
           $fecha->format("F"),

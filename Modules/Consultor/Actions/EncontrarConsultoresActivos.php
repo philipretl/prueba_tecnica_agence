@@ -11,7 +11,7 @@ class EncontrarConsultoresActivos{
 
     $consultoresActivos = $consultores->reject(function ($consultor) {
       if ($consultor->permiso!=null) {
-        return $consultor->permiso->co_tipo_usuario!= 1;
+        return $consultor->factura->isEmpty();
       }
 
     });

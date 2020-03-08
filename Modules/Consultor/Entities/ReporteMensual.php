@@ -16,6 +16,8 @@ class ReporteMensual extends Model
   protected $comision;
   protected $lucro;
 
+  protected $fillable=['mes'];
+
   public function __construct($valor, $mes, $anio,$totalImpuestos,$totalComision, $totalLucro){
     $this->valor=$valor;
     $this->mes=$mes;
@@ -27,6 +29,12 @@ class ReporteMensual extends Model
   }
   public function getGanancia(){
      return $this->ganancia;
+  }
+  public function getMes(){
+     return $this->mes;
+  }
+  public function getAnio(){
+     return $this->anio;
   }
   public function getValor(){
      dd($this->valor);

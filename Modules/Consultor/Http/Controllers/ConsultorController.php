@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Consultor\Interfaces\ConsultorServiceInterface;
+use Modules\Consultor\Charts\ConsultorChart;
 use Modules\Results\Result;
 class ConsultorController extends Controller
 {
@@ -50,7 +51,8 @@ class ConsultorController extends Controller
       switch ($result->getStatus()) {
 
         case 'SUCCESS':
-            return view('consultor::consultor')->with('consultores',$result->getDataAll()['consultoresActivos']);
+            return view('consultor::consultor')
+            ->with('consultores',$result->getDataAll()['consultoresActivos']);
           break;
         case 'EMPTY' :
             return view('consultor::consultor');
@@ -66,59 +68,28 @@ class ConsultorController extends Controller
      * Show the form for creating a new resource.
      * @return Response
      */
-    public function create()
-    {
-        return view('consultor::create');
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+     public function graficos(Request $request){
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        return view('consultor::show');
-    }
+       $result= new Result();
+       $result= $this->consultorService->generarReporteDesempenio($request->all());
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        return view('consultor::edit');
-    }
+       switch ($result->getStatus()) {
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+         case 'SUCCESS':
+             return view('consultor::graficos')
+            // ->with('desempenio_chart','holi');
+             ->with('desempenio_chart',$result->getDataAll()['desempenio_chart']);
+           break;
+         case 'EMPTY' :
+           return view('consultor::graficos')
+            ->with('mensaje','No hay graficos que mostrar');
+           //->with('desempenio_chart',$result->getDataAll()['desempenio_chart']);
+           break;
+         default:
+           return redirect()->route('consultor.dashboard');
+         break;
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+       }
+     }
 }
