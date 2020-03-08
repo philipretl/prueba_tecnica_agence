@@ -56,6 +56,15 @@
                 <div class="card-body">
                   <h5 class="card-title">Generar Informe de ganancias</h5>
                   <hr>
+                  <div class="Container">
+                    @error('month_to')
+                          <div class="alert alert-danger">{{ $message }}</div>
+
+                    @enderror
+                    @error('year_to')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                  </div>
                   <div class="d-flex justify-content-center">
                     <h4 class="justify-center">Periodo</h4>
                   </div>
@@ -151,15 +160,7 @@
                       <button class="btn btn-primary btn-border btn-round">Relatório</button>
                     </div>
                   </div>
-                  <div class="Container">
-                    @error('month_to')
-                          <div class="alert alert-danger">{{ $message }}</div>
 
-                    @enderror
-                    @error('year_to')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
-                  </div>
                 @endif
               @else
                 <br>
