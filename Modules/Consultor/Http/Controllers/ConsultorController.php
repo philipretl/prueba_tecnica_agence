@@ -69,7 +69,7 @@ class ConsultorController extends Controller
      * @return Response
      */
 
-     public function graficos(Request $request){
+     public function reporteDesempenio(Request $request){
 
        $result= new Result();
        $result= $this->consultorService->generarReporteDesempenio($request->all());
@@ -79,7 +79,30 @@ class ConsultorController extends Controller
          case 'SUCCESS':
              return view('consultor::graficos')
             // ->with('desempenio_chart','holi');
-             ->with('desempenio_chart',$result->getDataAll()['desempenio_chart']);
+             ->with('chart',$result->getDataAll()['desempenio_chart']);
+           break;
+         case 'EMPTY' :
+           return view('consultor::graficos')
+            ->with('mensaje','No hay graficos que mostrar');
+           //->with('desempenio_chart',$result->getDataAll()['desempenio_chart']);
+           break;
+         default:
+           return redirect()->route('consultor.dashboard');
+         break;
+
+       }
+     }
+     public function reporteGanancia(Request $request){
+
+       $result= new Result();
+       $result= $this->consultorService->generarReporteGanancia($request->all());
+
+       switch ($result->getStatus()) {
+
+         case 'SUCCESS':
+             return view('consultor::graficos')
+            // ->with('desempenio_chart','holi');
+             ->with('chart',$result->getDataAll()['ganancia_chart']);
            break;
          case 'EMPTY' :
            return view('consultor::graficos')

@@ -16,9 +16,7 @@ class EncontrarConsultoresActivos{
 
     });
     $consultoresActivos = $consultoresActivos->reject(function ($consultor) {
-
         return $consultor->co_usuario == null;
-
     });
 
     if ($consultoresActivos->isEmpty()) {

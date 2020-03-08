@@ -12,17 +12,17 @@
               <div class="alert alert-danger">{{$message}}</div>
           @enderror
           <div class="card-body">
-            @isset($desempenio_chart)
+            @isset($chart)
                 <a href="{{route('consultor.dashboard')}}" class="text-white">
                   <button type="button" class="btn btn-outline-success" name="button">
                     regresar
                   </button>
                 </a>
               <h5 class="card-title">Reporte Desempeño</h5>
-              <div style="width: 50%">
-                {{ $desempenio_chart->container() }}
+              <div style="width: 100%">
+                {{ $chart->container() }}
                   <script src=https://cdnjs.cloudflare.com/ajax/libs/echarts/4.0.2/echarts-en.min.js charset=utf-8></script>
-                {{ $desempenio_chart->script() }}
+                {{ $chart->script() }}
               </div>
             @endisset
             @isset($mensaje)

@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="col">
-                  <form class="" action="{{route('consultor.graficos.barra')}}" method="post">
+                  <form class="" action="{{route('consultor.reporte.desempenio')}}" method="post">
                     @csrf
                     @method('POST')
                     <input class="" type="hidden" name="consultores" value="{{$consultores}}">
@@ -38,7 +38,7 @@
                 </div>
                 <div class="col">
 
-                  <form class="" action="{{route('consultor.graficos.barra')}}" method="post">
+                  <form class="" action="{{route('consultor.reporte.ganancia')}}" method="post">
                     <input class="" type="hidden" name="consultores" value="{{$consultores}}">
                     <input class="date" type="hidden" name="fecha_inicial" value="{{$fecha_inicial}}">
                     <input class="date" type="hidden" name="fecha_final" value="{{$fecha_final}}">
@@ -129,25 +129,19 @@
                 <h5 class="card-title">{{$consultor->co_usuario}}</h5>
                 <hr>
                 @if ($consultor->reportes!=null)
-                  <div class="table-responsive">
-                    <table id="add-row" class="display table  table-sm table-striped table-hover table-bordered" >
-
-                    <thead>
-                      <tr>
-                        <th>Periodo</th>
-                        <th>Receita Liquida</th>
-                        <th>Custo Fixo</th>
-                        <th>Comissao</th>
-                        <th>Lucro</th>
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
                   @foreach ($consultor->reportes as $reporte)
 
                     <div class="table-responsive">
                       <table id="add-row" class="display table  table-sm table-striped table-hover table-bordered" >
-
+                        <thead>
+                          <tr>
+                            <th style="width:20%">Periodo</th>
+                            <th style="width:20%">Receita Liquida</th>
+                            <th style="width:20%">Custo Fixo</th>
+                            <th style="width:20%">Comissao</th>
+                            <th style="width:20%">Lucro</th>
+                          </tr>
+                        </thead>
 
                         <tbody>
 
@@ -174,17 +168,21 @@
                     <table id="add-row" class="display table  table-sm table-bordered" >
                       <tbody>
                         <tr>
-                          <th>Saldo</th>
-                          <th>@money(round($consultor->totalSaldos['total_ganancia']*100),'BRL') </th>
-                          <th>@money(round($consultor->totalSaldos['total_costo_fijo']*100),'BRL')</th>
-                          <th>@money(round($consultor->totalSaldos['total_comision']*100),'BRL')</th>
-                          <th>@money(round($consultor->totalSaldos['total_lucro']*100),'BRL')</th>
+                          <th style="width:20%">Saldo</th>
+                          <th style="width:20%">@money(round($consultor->totalSaldos['total_ganancia']*100),'BRL') </th>
+                          <th style="width:20%">@money(round($consultor->totalSaldos['total_costo_fijo']*100),'BRL')</th>
+                          <th style="width:20%">@money(round($consultor->totalSaldos['total_comision']*100),'BRL')</th>
+                          <th style="width:20%">@money(round($consultor->totalSaldos['total_lucro']*100),'BRL')</th>
                         </tr>
                       </tr>
                       </tbody>
                     </table>
                   </div>
                   @endif
+                @else
+                  <div class="container">
+                    <h4>Ningun Reporte que mostrar en el periodo seleccionado</h4>
+                  </div>
                 @endif
               </div>
             @endforeach

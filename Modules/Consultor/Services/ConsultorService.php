@@ -60,4 +60,15 @@ class ConsultorService implements ConsultorServiceInterface{
 
     return $result;
   }
+  
+  public function generarReporteGanancia($data){
+
+    $result = new Result();
+
+    if (!empty($data['consultores'])) {
+      $result=ReporteDesempenio::execute($data['consultores'], $data['fecha_inicial'], $data['fecha_final']);
+    }
+
+    return $result;
+  }
 }

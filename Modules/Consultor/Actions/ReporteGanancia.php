@@ -1,13 +1,14 @@
 <?php
 
 namespace Modules\Consultor\Actions;
+
 use Modules\Results\Result;
 use Modules\Consultor\Entities\Usuario;
 use Modules\Consultor\Charts\ConsultorChart;
 use Modules\Consultor\Actions\GenerarInforme;
 use Modules\Consultor\Actions\GenerarColorRandom;
 
-class ReporteDesempenio
+class ReporteGanancia
 {
 
   public static function execute($consultores, $fechaInicial, $fechaFinal){
@@ -39,36 +40,21 @@ class ReporteDesempenio
       $generarInforme->execute($consultor, $fechaInicial, $fechaFinal->subMonths(1));
       $color=GenerarColorRandom::execute();
       $backGroundColor=GenerarColorRandom::execute();
+      dd($consultor);
+      $desempenioChart->dataset($consultor->co_usuario, 'bar',$valores)
+      ->color($color)
+      ->backgroundcolor($backGroundColor);
+      $desempenioChart->labels($meses);
+      $desempenioChart->labels(array_unique($meses));
 
-      if (!$consultor->reportes==null) {
-        foreach ($consultor->reportes as $reporte) {
-          array_push($meses, $reporte->getMes() . ' '. $reporte->getAnio());
-          array_push($valores,$reporte->getGanancia());
-        }
-        $desempenioChart->dataset($consultor->co_usuario, 'bar',$valores)
-        ->color($color)
-        ->backgroundcolor($backGroundColor);
-        $desempenioChart->labels($meses);
-        $desempenioChart->labels(array_unique($meses));
 
-      }
-      $costoFijo=$costoFijo+$consultor->valorSalario();
     }
-    //dd($costoFijo/sizeof($consultoresTemp));
-
-
 
     if (empty($desempenioChart->datasets)) {
       $result->setStatus('EMPTY');
-    }else{
-      for ($i=0; $i <sizeof($meses) ; $i++) {
-        array_push($costoFijoPromedio, $costoFijo/sizeof($consultoresTemp));
-      }
-      $desempenioChart->dataset('Costo Fijo Promedio', 'line',$costoFijoPromedio)
-      ->backgroundcolor(GenerarColorRandom::execute());
     }
     $result->addData('desempenio_chart', $desempenioChart);
-  //dd($result);
+  
     return $result;
   }
 }
