@@ -39,24 +39,24 @@ class ReporteGanancia
     $colores=array();
 
 
-      foreach ($consultoresTemp as $consultor) {
-        $generarInforme->execute($consultor, $fechaInicial, $fechaFinal->subMonths(1));
+    foreach ($consultoresTemp as $consultor) {
+      $generarInforme->execute($consultor, $fechaInicial, $fechaFinal->subMonths(1));
 
-        if (!empty($consultor->reportes)) {
-          $flag=true;
-        }
-        CalcularSaldo::execute($consultor);
-        array_push($valores,round($consultor->totalSaldos['total_ganancia']));
-        array_push($labels,$consultor->co_usuario);
-        array_push($colores,GenerarColorRandom::execute());
-
+      if (!empty($consultor->reportes)) {
+        $flag=true;
       }
+      CalcularSaldo::execute($consultor);
+      array_push($valores,round($consultor->totalSaldos['total_ganancia']));
+      array_push($labels,$consultor->co_usuario);
+      array_push($colores,GenerarColorRandom::execute());
 
-      $color=GenerarColorRandom::execute();
-      $gananciaChart->labels($labels);
-      $gananciaChart->dataset($consultor->co_usuario, 'doughnut',$valores)
-      ->color($color)
-      ->backgroundcolor($colores);
+    }
+
+    $color=GenerarColorRandom::execute();
+    $gananciaChart->labels($labels);
+    $gananciaChart->dataset($consultor->co_usuario, 'doughnut',$valores)
+    ->color($color)
+    ->backgroundcolor($colores);
 
     if ($flag==false) {
       $result->setStatus('EMPTY');
