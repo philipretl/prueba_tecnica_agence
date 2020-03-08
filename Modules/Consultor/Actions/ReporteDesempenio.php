@@ -61,14 +61,16 @@ class ReporteDesempenio
     if (empty($desempenioChart->datasets)) {
       $result->setStatus('EMPTY');
     }else{
+        //array_push($costoFijoPromedio, 0);
       for ($i=0; $i <sizeof($meses) ; $i++) {
         array_push($costoFijoPromedio, $costoFijo/sizeof($consultoresTemp));
       }
       $desempenioChart->dataset('Costo Fijo Promedio', 'line',$costoFijoPromedio)
       ->backgroundcolor(GenerarColorRandom::execute());
     }
+    $desempenioChart->title('Informe de desempeño de los consultores', 30, "rgb(255, 99, 132)", true, 'Helvetica Neue');
     $result->addData('desempenio_chart', $desempenioChart);
-  //dd($result);
+
     return $result;
   }
 }

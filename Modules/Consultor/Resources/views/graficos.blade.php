@@ -13,11 +13,6 @@
           @enderror
           <div class="card-body">
             @isset($chart)
-                <a href="{{route('consultor.dashboard')}}" class="text-white">
-                  <button type="button" class="btn btn-outline-success" name="button">
-                    regresar
-                  </button>
-                </a>
               <h5 class="card-title">Reporte Desempeño</h5>
               <div style="width: 100%">
                 {{ $chart->container() }}

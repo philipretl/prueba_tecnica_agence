@@ -39,10 +39,12 @@
                 <div class="col">
 
                   <form class="" action="{{route('consultor.reporte.ganancia')}}" method="post">
+                    @csrf
+                    @method('POST')
                     <input class="" type="hidden" name="consultores" value="{{$consultores}}">
                     <input class="date" type="hidden" name="fecha_inicial" value="{{$fecha_inicial}}">
                     <input class="date" type="hidden" name="fecha_final" value="{{$fecha_final}}">
-                    <button type="button" class="btn btn-primary btn-border btn-round" name="button">
+                    <button type="submit" class="btn btn-primary btn-border btn-round" name="button">
                       <i class="fas fa-chart-pie"> Informe Ganancias</i>
                     </button>
 

@@ -5,6 +5,7 @@ namespace Modules\Consultor\Actions;
 use Modules\Results\Result;
 use Modules\Consultor\Entities\Usuario;
 use Modules\Consultor\Charts\ConsultorChart;
+use Modules\Consultor\Actions\CalcularSaldo;
 use Modules\Consultor\Actions\GenerarInforme;
 use Modules\Consultor\Actions\GenerarColorRandom;
 
@@ -17,6 +18,7 @@ class ReporteGanancia
     $generarInforme=new GenerarInforme();
     $fechaInicial=explode('-',$fechaInicial);
     $fechaFinal=explode('-',$fechaFinal);
+    $flag=false;
 
     $consultoresTemp=array();
 
@@ -31,30 +33,38 @@ class ReporteGanancia
       array_push($consultoresTemp, Usuario::where('co_usuario',$consultor->co_usuario)->first());
     }
 
-    $desempenioChart = new ConsultorChart();
-    $meses=array();
-    $costoFijoPromedio=array();
-    $costoFijo=0;
-    foreach ($consultoresTemp as $consultor) {
-      $valores=array();
-      $generarInforme->execute($consultor, $fechaInicial, $fechaFinal->subMonths(1));
+    $gananciaChart = new ConsultorChart();
+    $valores=array();
+    $labels=array();
+    $colores=array();
+
+
+      foreach ($consultoresTemp as $consultor) {
+        $generarInforme->execute($consultor, $fechaInicial, $fechaFinal->subMonths(1));
+
+        if (!empty($consultor->reportes)) {
+          $flag=true;
+        }
+        CalcularSaldo::execute($consultor);
+        array_push($valores,round($consultor->totalSaldos['total_ganancia']));
+        array_push($labels,$consultor->co_usuario);
+        array_push($colores,GenerarColorRandom::execute());
+
+      }
+
       $color=GenerarColorRandom::execute();
-      $backGroundColor=GenerarColorRandom::execute();
-      dd($consultor);
-      $desempenioChart->dataset($consultor->co_usuario, 'bar',$valores)
+      $gananciaChart->labels($labels);
+      $gananciaChart->dataset($consultor->co_usuario, 'doughnut',$valores)
       ->color($color)
-      ->backgroundcolor($backGroundColor);
-      $desempenioChart->labels($meses);
-      $desempenioChart->labels(array_unique($meses));
+      ->backgroundcolor($colores);
 
-
-    }
-
-    if (empty($desempenioChart->datasets)) {
+    if ($flag==false) {
       $result->setStatus('EMPTY');
     }
-    $result->addData('desempenio_chart', $desempenioChart);
-  
+    $gananciaChart->title('Informe de ganancia de los consultores', 30, "rgb(255, 99, 132)", true, 'Helvetica Neue');
+
+    $result->addData('ganancia_chart', $gananciaChart);
+
     return $result;
   }
 }
