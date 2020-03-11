@@ -21,7 +21,6 @@ class ReporteDesempenio
 
     $fechaInicial=GenerarFecha::execute($fechaInicial[1] ,$fechaInicial[0], $fechaInicial[2]);
     $fechaFinal=GenerarFecha::execute($fechaFinal[1] ,$fechaFinal[0], $fechaFinal[2]);
-    //dd($consultores);
     $object = (array)json_decode($consultores);
     $collection = Usuario::hydrate($object);
     $consultores = $collection->flatten();
@@ -48,29 +47,31 @@ class ReporteDesempenio
         $desempenioChart->dataset($consultor->co_usuario, 'bar',$valores)
         ->color($color)
         ->backgroundcolor($backGroundColor);
-        $desempenioChart->labels($meses);
-        $desempenioChart->labels(array_unique($meses));
 
       }
+
       $costoFijo=$costoFijo+$consultor->valorSalario();
     }
-    //dd($costoFijo/sizeof($consultoresTemp));
+
+    $desempenioChart->labels($meses);
+    //$desempenioChart->labels(array_unique($meses));
 
 
 
     if (empty($desempenioChart->datasets)) {
       $result->setStatus('EMPTY');
     }else{
-        //array_push($costoFijoPromedio, 0);
-      for ($i=0; $i <sizeof($meses) ; $i++) {
+
+      for ($i=0; $i <sizeof($consultores) ; $i++) {
         array_push($costoFijoPromedio, $costoFijo/sizeof($consultoresTemp));
       }
+
       $desempenioChart->dataset('Costo Fijo Promedio', 'line',$costoFijoPromedio)
       ->backgroundcolor(GenerarColorRandom::execute());
     }
     $desempenioChart->title('Informe de desempeño de los consultores', 30, "rgb(255, 99, 132)", true, 'Helvetica Neue');
     $result->addData('desempenio_chart', $desempenioChart);
-
+    //dd($desempenioChart);
     return $result;
   }
 }

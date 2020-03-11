@@ -16,7 +16,7 @@
               <h5 class="card-title">Reporte Desempeño</h5>
               <div style="width: 100%">
                 {{ $chart->container() }}
-                  <script src=https://cdnjs.cloudflare.com/ajax/libs/echarts/4.0.2/echarts-en.min.js charset=utf-8></script>
+                  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
                 {{ $chart->script() }}
               </div>
             @endisset
