@@ -53,8 +53,8 @@ class ReporteDesempenio
       $costoFijo=$costoFijo+$consultor->valorSalario();
     }
 
-    $desempenioChart->labels($meses);
-    //$desempenioChart->labels(array_unique($meses));
+    //$desempenioChart->labels($meses);
+    $desempenioChart->labels(array_unique($meses));
 
 
 

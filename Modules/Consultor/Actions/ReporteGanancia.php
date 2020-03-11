@@ -46,9 +46,12 @@ class ReporteGanancia
         $flag=true;
       }
       CalcularSaldo::execute($consultor);
-      array_push($valores,round($consultor->totalSaldos['total_ganancia']));
-      array_push($labels,$consultor->co_usuario);
-      array_push($colores,GenerarColorRandom::execute());
+      if($consultor->totalSaldos!=null){
+        array_push($valores,round($consultor->totalSaldos['total_ganancia']));
+        array_push($labels,$consultor->co_usuario);
+        array_push($colores,GenerarColorRandom::execute());
+      }
+
 
     }
 
